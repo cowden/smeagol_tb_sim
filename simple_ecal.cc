@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
     UImanager->ApplyCommand(command+macro);
   } else {
     // interactive mode
-    UImanager->ApplyCommand("/control/execute init_vis.mac");
+    UImanager->ApplyCommand("/control/execute scripts/init_vis.mac");
     ui->SessionStart();
   }
 
