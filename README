@@ -8,9 +8,15 @@ detector simulations I can use to explore and develop smeagol.
 # Data Collection
 
 # Setup
+Source the `scripts/setup.sh` script to prepare a working environment to
+compile the simulations.
 
 # Geometries
+The following simulation executables implement various geometries and
+scenarios to study.  Some of these may leverage common code in the
+`include` and `src` directories.
 
+## Simple Ecal `simple_ecal.cc`
 
 # Setup and Running
  
