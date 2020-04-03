@@ -8,6 +8,10 @@
 #include "G4PVPlacement.hh"
 #include "G4AutoDelete.hh"
 
+#include "G4OpticalSurface.hh"
+#include "G4LogicalBorderSurface.hh"
+#include "G4LogicalSkinSurface.hh"
+
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
@@ -68,6 +72,20 @@ void SSEDetectorConstruction::DefineMaterials()
   new G4Material("Galactic",1.,1.01*g/mole,CLHEP::universe_mean_density,
     kStateGas,2.73*kelvin,3.e-18*pascal);
 
+  // set optical properties
+  // load the file 
+  H5::H5File prop_file("prop_table.h5",H5F_ACC_RDONLY); // define name in macro
+
+  // load the properties table for air
+  G4MaterialPropertiesTable * lead_glass_properties = LoadMaterialPropertiesTable(prop_file,"/lead-glass/props");
+  G4cout << "Lead-Glass Material Properties Table" << G4endl;
+  lead_glass_properties->DumpTable();
+  leadGlass->SetMaterialPropertiesTable(lead_glass_properties);  
+
+  // load the properties table for silicon
+
+  // close the file
+  prop_file.close();
 }
 
 
@@ -120,3 +138,37 @@ G4VPhysicalVolume* SSEDetectorConstruction::DefineVolumes()
   return world_PV;
 }
 
+G4MaterialPropertiesTable * SSEDetectorConstruction::LoadMaterialPropertiesTable(H5::H5File & file,const char * name)
+{
+
+  H5::DataSet dataset = file.openDataSet(name);
+
+  // extract the data
+  const unsigned ndims = dataset.getSpace().getSimpleExtentNdims(); 
+  std::vector<hsize_t> dims(ndims);
+  dataset.getSpace().getSimpleExtentDims(&dims[0],NULL);
+  H5::DataSpace memspace(2,&dims[0]); 
+  std::vector<float> raw_props(dataset.getSpace().getSelectNpoints());
+  dataset.read(&raw_props[0], H5::PredType::NATIVE_FLOAT, memspace, dataset.getSpace());
+
+  // make copies of copies of the columns and convert the units
+  const unsigned n = dims[0];
+  const unsigned w = dims[1];
+  std::vector<G4double> energy(n);
+  std::vector<G4double> rindex(n);
+  std::vector<G4double> abslength(n);
+
+  for ( unsigned i=0; i != n; i++ ){
+    energy[i] = raw_props[i*w]*eV;
+    rindex[i] = raw_props[i*w+1];
+    abslength[i] = raw_props[i*w+2]*m;
+  }
+
+  // create the material properties
+  G4MaterialPropertiesTable * prop_table = new G4MaterialPropertiesTable();
+  prop_table->AddProperty("RINDEX", energy.data(), rindex.data(), n);
+  prop_table->AddProperty("ABSLENGTH", energy.data(), abslength.data(), n);
+  
+
+  return prop_table;
+}

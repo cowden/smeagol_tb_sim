@@ -23,5 +23,8 @@ scenarios to study.  Some of these may leverage common code in the
 # General References
 
 * https://geant4.kek.jp/LXR/
+* https://geant4.kek.jp/Reference/10.06/index.html
 * http://geant4.web.cern.ch/support/user_documentation
+* https://portal.hdfgroup.org/display/HDF5/HDF5+Application+Developer%27s+Guide
+* 
  
