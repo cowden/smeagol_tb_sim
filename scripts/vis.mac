@@ -5,7 +5,7 @@
 # Use these open statements to open selected visualization
 #
 # Use this open statement to create an OpenGL view:
-/vis/open OGL 600x600-0+0
+#/vis/open OGL 600x600-0+0
 #
 # Use this open statement to create an OpenInventor view:
 #/vis/open OIX
@@ -20,7 +20,8 @@
 #
 # Use this open statement to create a .wrl file suitable for
 # viewing in a VRML viewer:
-#/vis/open VRML2FILE
+/run/initialize
+/vis/open VRML2FILE
 #
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
@@ -31,7 +32,7 @@
 /vis/drawVolume
 #
 # Specify view angle:
-/vis/viewer/set/viewpointThetaPhi 90. 180.
+/vis/viewer/set/viewpointThetaPhi 40. 40.
 #
 # Specify zoom value:
 #/vis/viewer/zoom 2.
@@ -80,3 +81,5 @@
 #
 # For file-based drivers, use this to create an empty detector view:
 #/vis/viewer/flush
+
+/run/beamOn 1

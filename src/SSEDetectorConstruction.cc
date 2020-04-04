@@ -95,10 +95,10 @@ G4VPhysicalVolume* SSEDetectorConstruction::DefineVolumes()
 
   // geometry parameters
   G4double world_width = 50*cm;
-  G4double world_height = 1000*cm;
+  G4double world_height = 50*cm;
 
   G4double width = 50*cm;
-  G4double height = 900*cm;
+  G4double height = 30*cm;
 
   G4double ro_height = 1*mm;
 
@@ -109,13 +109,13 @@ G4VPhysicalVolume* SSEDetectorConstruction::DefineVolumes()
 
   // world
   auto world_shape = new G4Box("World",world_width/2,world_width/2,world_height/2);
-  auto world_LV = new G4LogicalVolume(world_shape,absorberMaterial,"World");
+  auto world_LV = new G4LogicalVolume(world_shape,defaultMaterial,"World");
   auto world_PV = new G4PVPlacement(0,G4ThreeVector(),world_LV,"World",0,false,0,checkOverlaps_);
 
 
   // block
   auto block_shape = new G4Box("Box",width/2,width/2,height/2);
-  auto block_LV = new G4LogicalVolume(block_shape,readoutMaterial,"Box");
+  auto block_LV = new G4LogicalVolume(block_shape,absorberMaterial,"Box");
   auto block_PV = new G4PVPlacement(0,G4ThreeVector(),block_LV,"Box",world_LV,false,0,checkOverlaps_);
 
 
@@ -134,6 +134,8 @@ G4VPhysicalVolume* SSEDetectorConstruction::DefineVolumes()
   rovisatt->SetVisibility(true);
   ro_LV->SetVisAttributes(rovisatt);
 
+  // Print the Materials
+  DumpDetectorMaterialProperties(); 
 
   return world_PV;
 }
@@ -168,7 +170,20 @@ G4MaterialPropertiesTable * SSEDetectorConstruction::LoadMaterialPropertiesTable
   G4MaterialPropertiesTable * prop_table = new G4MaterialPropertiesTable();
   prop_table->AddProperty("RINDEX", energy.data(), rindex.data(), n);
   prop_table->AddProperty("ABSLENGTH", energy.data(), abslength.data(), n);
-  
+ 
 
   return prop_table;
 }
+
+void SSEDetectorConstruction::DumpDetectorMaterialProperties()
+{
+
+  // 
+  // print material properties
+  
+  G4cout << G4Material::GetMaterial("Galactic") << G4endl;
+  G4cout << G4Material::GetMaterial("Lead-Glass") << G4endl;
+  G4cout << G4Material::GetMaterial("G4_Si") << G4endl;
+
+}
+

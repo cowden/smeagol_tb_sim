@@ -13,6 +13,8 @@
 #include "G4UIcommand.hh"
 #include "FTFP_BERT.hh"
 #include "QBBC.hh"
+#include "G4OpticalPhysics.hh"
+#include "G4EmStandardPhysics_option4.hh"
 
 #include "Randomize.hh"
 
@@ -55,6 +57,7 @@ int main(int argc, char **argv) {
   //  set mandatory initialization classes
   auto physicsList = new FTFP_BERT;
   //auto physicsList = new QBBC;
+  physicsList->RegisterPhysics(new G4OpticalPhysics());
   runManager->SetUserInitialization(physicsList);
 
   auto detConstruction = new SSEDetectorConstruction();

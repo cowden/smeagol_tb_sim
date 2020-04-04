@@ -40,6 +40,12 @@ private:
   */
   G4MaterialPropertiesTable * LoadMaterialPropertiesTable(H5::H5File & , const char *);
 
+  /**
+  * Dump material properties by detector elements to the log file.
+  */
+  void DumpDetectorMaterialProperties();
+
+
   G4VPhysicalVolume* absorberPV_; // the absorber physical volume
   G4VPhysicalVolume* gapPV_; // the gap physical volume
 
