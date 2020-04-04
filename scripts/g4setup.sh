@@ -11,3 +11,8 @@ source ${G4HOME}/geant4make.sh
 
 export G4WORKDIR=`pwd`
 
+
+#
+# set the VRML viewer
+export G4VRMLFILE_VIEWER=freewrl
+
