@@ -8,6 +8,8 @@
 #include "G4PVPlacement.hh"
 #include "G4AutoDelete.hh"
 
+#include "G4PVReplica.hh"
+
 #include "G4OpticalSurface.hh"
 #include "G4LogicalBorderSurface.hh"
 #include "G4LogicalSkinSurface.hh"
@@ -22,6 +24,8 @@
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+
+#include "SSEReadOutSD.h"
 
 
 SSEDetectorConstruction::SSEDetectorConstruction():
@@ -83,6 +87,9 @@ void SSEDetectorConstruction::DefineMaterials()
   leadGlass->SetMaterialPropertiesTable(lead_glass_properties);  
 
   // load the properties table for silicon
+  G4Material* si = G4Material::GetMaterial("G4_Si");
+  si->SetMaterialPropertiesTable(lead_glass_properties); 
+
 
   // close the file
   prop_file.close();
@@ -108,31 +115,59 @@ G4VPhysicalVolume* SSEDetectorConstruction::DefineVolumes()
   auto readoutMaterial = G4Material::GetMaterial("G4_Si");
 
   // world
-  auto world_shape = new G4Box("World",world_width/2,world_width/2,world_height/2);
+  auto world_shape = new G4Box("World",world_width/2.,world_width/2.,world_height/2.);
   auto world_LV = new G4LogicalVolume(world_shape,defaultMaterial,"World");
   auto world_PV = new G4PVPlacement(0,G4ThreeVector(),world_LV,"World",0,false,0,checkOverlaps_);
 
 
   // block
-  auto block_shape = new G4Box("Box",width/2,width/2,height/2);
-  auto block_LV = new G4LogicalVolume(block_shape,absorberMaterial,"Box");
-  auto block_PV = new G4PVPlacement(0,G4ThreeVector(),block_LV,"Box",world_LV,false,0,checkOverlaps_);
-
-
+  auto block_shape = new G4Box("Box",width/2.,width/2.,height/2.);
+  absorberLog_ = new G4LogicalVolume(block_shape,absorberMaterial,"Box");
+  absorberPV_ = new G4PVPlacement(0,G4ThreeVector(),absorberLog_,"Box",world_LV,false,0,checkOverlaps_);
 
   // readout
-  auto ro_shape = new G4Box("RO",width/2,width/2,ro_height/2);
-  auto ro_LV = new G4LogicalVolume(ro_shape,readoutMaterial,"RO");
-  auto ro_PV = new G4PVPlacement(0,G4ThreeVector(0,0,height/2+ro_height/2),ro_LV,"RO",world_LV,false,0,checkOverlaps_);
+  auto ro_shape = new G4Box("ROUnit",width/2.,width/2.,ro_height/2.);
+  readoutLog_ = new G4LogicalVolume(ro_shape,readoutMaterial,"RO");
+  readoutPV_ = new G4PVPlacement(0,G4ThreeVector(0,0,height/2.+ro_height/2.),readoutLog_,"RO",world_LV,false,0,checkOverlaps_);
+
+  auto rep_shape = new G4Box("ROStrip",width/2.,width/2./10.,ro_height/2.);
+  auto rep_log = new G4LogicalVolume(rep_shape,readoutMaterial,"rep");
+  auto temp = new G4PVReplica("array",rep_log,readoutLog_,kYAxis,10,width/10.);
+
+  auto ro_segment_shape = new G4Box("ROSeg",width/2./10.,width/2./10.,ro_height/2.);
+  roSegmentLog_ = new G4LogicalVolume(ro_segment_shape,readoutMaterial,"ROSeg");
+  roSegments_ = new G4PVReplica("ROSeg",roSegmentLog_,rep_log,kXAxis,10,width/10.);
 
 
   auto boxvisatt = new G4VisAttributes(G4Color(1.,1.,1.));
   boxvisatt->SetVisibility(true);
-  block_LV->SetVisAttributes(boxvisatt);
+  absorberLog_->SetVisAttributes(boxvisatt);
 
   auto rovisatt = new G4VisAttributes(G4Color(1.,0.,0.));
   rovisatt->SetVisibility(true);
-  ro_LV->SetVisAttributes(rovisatt);
+  roSegmentLog_->SetVisAttributes(rovisatt);
+
+
+  //
+  // load the optical surface properties
+  // temporarily put in some manual values
+  G4OpticalSurface* absWrap = new G4OpticalSurface("AbsorberWrapper");
+
+  new G4LogicalBorderSurface("AbsorberWrap", absorberPV_, readoutPV_, absWrap);
+
+  absWrap->SetType(dielectric_dielectric);
+  absWrap->SetFinish(polished);
+  absWrap->SetModel(glisur);
+
+  G4double pp[] = {2.0*eV, 3.5*eV};
+  const G4int num = sizeof(pp)/sizeof(G4double);
+  G4double reflectivity[] = {1.,1.};
+  G4double efficiency[] = {1., 1.};
+  
+  G4MaterialPropertiesTable* absWrapProps = new G4MaterialPropertiesTable();
+  absWrapProps->AddProperty("REFLECTIVITY",pp,reflectivity,num);
+  absWrapProps->AddProperty("EFFICIENCY",pp,efficiency,num);
+  absWrap->SetMaterialPropertiesTable(absWrapProps);
 
   // Print the Materials
   DumpDetectorMaterialProperties(); 
@@ -184,6 +219,23 @@ void SSEDetectorConstruction::DumpDetectorMaterialProperties()
   G4cout << G4Material::GetMaterial("Galactic") << G4endl;
   G4cout << G4Material::GetMaterial("Lead-Glass") << G4endl;
   G4cout << G4Material::GetMaterial("G4_Si") << G4endl;
+
+}
+
+void SSEDetectorConstruction::ConstructSDandField() 
+{
+
+  if ( !absorberPV_ ) return;
+
+  // readout SD
+  G4cout << "Constructing SSEReadOutSD" << G4endl;
+  SSEReadOutSD* readoutSD = new SSEReadOutSD("SSEReadOutSD");
+
+  // Set the readout positions
+  //readoutSD->InitSegments(readoutPV_,10);
+
+  SetSensitiveDetector(roSegmentLog_,readoutSD);
+  
 
 }
 

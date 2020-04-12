@@ -15,6 +15,7 @@
 
 class G4VPhysicalVolume;
 class G4GlobalMagFieldMessenger;
+class G4PVReplica;
 
 class SSEDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -23,6 +24,8 @@ public:
   virtual ~SSEDetectorConstruction();
 
   virtual G4VPhysicalVolume* Construct();
+
+  virtual void ConstructSDandField();
 
 private:
   void DefineMaterials();
@@ -46,8 +49,13 @@ private:
   void DumpDetectorMaterialProperties();
 
 
+  G4LogicalVolume* absorberLog_;
+  G4LogicalVolume* readoutLog_;
   G4VPhysicalVolume* absorberPV_; // the absorber physical volume
-  G4VPhysicalVolume* gapPV_; // the gap physical volume
+  G4VPhysicalVolume* readoutPV_; // the gap physical volume
+
+  G4LogicalVolume* roSegmentLog_;
+  G4PVReplica* roSegments_;
 
   G4bool checkOverlaps_;
 };

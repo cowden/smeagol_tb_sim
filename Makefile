@@ -5,7 +5,7 @@ name := simple_ecal
 G4TARGET := $(name)
 G4EXLIB := true
 
-LDFLAGS := -lhdf5 -lhdf5_cpp
+LDFLAGS := -lhdf5 -lhdf5_cpp 
 
 ifndef G4INSTALL
   G4INSTALL= ../../../

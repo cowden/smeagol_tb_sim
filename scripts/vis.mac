@@ -5,7 +5,7 @@
 # Use these open statements to open selected visualization
 #
 # Use this open statement to create an OpenGL view:
-#/vis/open OGL 600x600-0+0
+/vis/open OGL 600x600-0+0
 #
 # Use this open statement to create an OpenInventor view:
 #/vis/open OIX
@@ -20,9 +20,13 @@
 #
 # Use this open statement to create a .wrl file suitable for
 # viewing in a VRML viewer:
-/run/initialize
-/vis/open VRML2FILE
+#/run/initialize
+#/vis/open VRML2FILE
 #
+#
+# Print the geometry tree
+/vis/drawTree
+
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
 /vis/viewer/set/autoRefresh false
@@ -54,7 +58,7 @@
 # (if too many tracks cause core dump => /tracking/storeTrajectory 0)
 #
 # Draw hits at end of event:
-#/vis/scene/add/hits
+/vis/scene/add/hits
 #
 # To draw only gammas:
 #/vis/filtering/trajectories/create/particleFilter
