@@ -49,6 +49,19 @@ private:
   void DumpDetectorMaterialProperties();
 
 
+
+  // ------------------------------------------
+  // member data
+
+  G4double world_width_;
+  G4double world_height_;
+  G4double width_;
+  G4double height_;
+  G4double ro_height_;
+
+  unsigned nXSegments_;
+  unsigned nYSegments_; 
+
   G4LogicalVolume* absorberLog_;
   G4LogicalVolume* readoutLog_;
   G4VPhysicalVolume* absorberPV_; // the absorber physical volume

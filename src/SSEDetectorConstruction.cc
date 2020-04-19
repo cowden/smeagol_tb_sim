@@ -19,6 +19,8 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
 
+#include "G4SDManager.hh"
+
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
@@ -30,7 +32,14 @@
 
 SSEDetectorConstruction::SSEDetectorConstruction():
   G4VUserDetectorConstruction(),
-  checkOverlaps_(true)
+  checkOverlaps_(true),
+  world_width_(50*cm),
+  world_height_(50*cm),
+  width_( 50*cm),
+  height_(30*cm),
+  ro_height_(1*mm),
+  nXSegments_(10U),
+  nYSegments_(10U)
 { }
 
 
@@ -100,14 +109,6 @@ void SSEDetectorConstruction::DefineMaterials()
 G4VPhysicalVolume* SSEDetectorConstruction::DefineVolumes()
 { 
 
-  // geometry parameters
-  G4double world_width = 50*cm;
-  G4double world_height = 50*cm;
-
-  G4double width = 50*cm;
-  G4double height = 30*cm;
-
-  G4double ro_height = 1*mm;
 
   // get materials
   auto defaultMaterial = G4Material::GetMaterial("Galactic");
@@ -115,28 +116,28 @@ G4VPhysicalVolume* SSEDetectorConstruction::DefineVolumes()
   auto readoutMaterial = G4Material::GetMaterial("G4_Si");
 
   // world
-  auto world_shape = new G4Box("World",world_width/2.,world_width/2.,world_height/2.);
+  auto world_shape = new G4Box("World",world_width_/2.,world_width_/2.,world_height_/2.);
   auto world_LV = new G4LogicalVolume(world_shape,defaultMaterial,"World");
   auto world_PV = new G4PVPlacement(0,G4ThreeVector(),world_LV,"World",0,false,0,checkOverlaps_);
 
 
   // block
-  auto block_shape = new G4Box("Box",width/2.,width/2.,height/2.);
+  auto block_shape = new G4Box("Box",width_/2.,width_/2.,height_/2.);
   absorberLog_ = new G4LogicalVolume(block_shape,absorberMaterial,"Box");
   absorberPV_ = new G4PVPlacement(0,G4ThreeVector(),absorberLog_,"Box",world_LV,false,0,checkOverlaps_);
 
   // readout
-  auto ro_shape = new G4Box("ROUnit",width/2.,width/2.,ro_height/2.);
+  auto ro_shape = new G4Box("ROUnit",width_/2.,width_/2.,ro_height_/2.);
   readoutLog_ = new G4LogicalVolume(ro_shape,readoutMaterial,"RO");
-  readoutPV_ = new G4PVPlacement(0,G4ThreeVector(0,0,height/2.+ro_height/2.),readoutLog_,"RO",world_LV,false,0,checkOverlaps_);
+  readoutPV_ = new G4PVPlacement(0,G4ThreeVector(0,0,height_/2.+ro_height_/2.),readoutLog_,"RO",world_LV,false,0,checkOverlaps_);
 
-  auto rep_shape = new G4Box("ROStrip",width/2.,width/2./10.,ro_height/2.);
+  auto rep_shape = new G4Box("ROStrip",width_/2.,width_/2./nYSegments_,ro_height_/2.);
   auto rep_log = new G4LogicalVolume(rep_shape,readoutMaterial,"rep");
-  auto temp = new G4PVReplica("array",rep_log,readoutLog_,kYAxis,10,width/10.);
+  auto temp = new G4PVReplica("array",rep_log,readoutLog_,kYAxis,nYSegments_,width_/nYSegments_);
 
-  auto ro_segment_shape = new G4Box("ROSeg",width/2./10.,width/2./10.,ro_height/2.);
+  auto ro_segment_shape = new G4Box("ROSeg",width_/2./nXSegments_,width_/2./nYSegments_,ro_height_/2.);
   roSegmentLog_ = new G4LogicalVolume(ro_segment_shape,readoutMaterial,"ROSeg");
-  roSegments_ = new G4PVReplica("ROSeg",roSegmentLog_,rep_log,kXAxis,10,width/10.);
+  roSegments_ = new G4PVReplica("ROSeg",roSegmentLog_,rep_log,kXAxis,nXSegments_,width_/nYSegments_);
 
 
   auto boxvisatt = new G4VisAttributes(G4Color(1.,1.,1.));
@@ -229,10 +230,8 @@ void SSEDetectorConstruction::ConstructSDandField()
 
   // readout SD
   G4cout << "Constructing SSEReadOutSD" << G4endl;
-  SSEReadOutSD* readoutSD = new SSEReadOutSD("SSEReadOutSD");
-
-  // Set the readout positions
-  //readoutSD->InitSegments(readoutPV_,10);
+  SSEReadOutSD* readoutSD = new SSEReadOutSD("SSEReadOutSD",nXSegments_,nYSegments_);
+  G4SDManager::GetSDMpointer()->AddNewDetector(readoutSD);
 
   SetSensitiveDetector(roSegmentLog_,readoutSD);
   

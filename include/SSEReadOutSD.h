@@ -24,20 +24,19 @@ public:
 
   /**
   * Default Constructor
+  * Pass the sensitive detector name
+  * Parameters:
+  *  * name
+  *  * number of segments along X-axis
+  *  * number of segments along Y-axis
   */
-  SSEReadOutSD(G4String name);
+  SSEReadOutSD(G4String , unsigned, unsigned);
 
   /**
   * Default destructor
   */
   virtual ~SSEReadOutSD();
 
-  /**
-  * Initialize the object with the readout segmentation.
-  * Pass the Readout physical volume to get locations.
-  * nSegments counts the number of segments along a side of the detector
-  */
-  virtual void InitSegments(const G4VPhysicalVolume *,unsigned nSegments);
 
   /**
   * Initialize
@@ -68,6 +67,13 @@ public:
   virtual void EndOfEvent(G4HCofThisEvent *);
 
 private:
+
+
+  unsigned nX_;
+  unsigned nY_;
+  unsigned nSegments_;
+
+  SSEReadOutHitsCollection * hitCollection_;
 
 };
 
