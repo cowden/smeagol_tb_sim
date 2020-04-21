@@ -33,13 +33,13 @@
 SSEDetectorConstruction::SSEDetectorConstruction():
   G4VUserDetectorConstruction(),
   checkOverlaps_(true),
-  world_width_(50*cm),
-  world_height_(50*cm),
-  width_( 50*cm),
+  world_width_(150*cm),
+  world_height_(150*cm),
+  width_( 100*cm),
   height_(30*cm),
   ro_height_(1*mm),
-  nXSegments_(10U),
-  nYSegments_(10U)
+  nXSegments_(75U),
+  nYSegments_(75U)
 { }
 
 
@@ -144,7 +144,7 @@ G4VPhysicalVolume* SSEDetectorConstruction::DefineVolumes()
   boxvisatt->SetVisibility(true);
   absorberLog_->SetVisAttributes(boxvisatt);
 
-  auto rovisatt = new G4VisAttributes(G4Color(1.,0.,0.));
+  auto rovisatt = new G4VisAttributes(G4Color(0.,0.,0.));
   rovisatt->SetVisibility(true);
   roSegmentLog_->SetVisAttributes(rovisatt);
 

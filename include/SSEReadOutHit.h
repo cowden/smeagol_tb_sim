@@ -61,6 +61,26 @@ public:
   virtual void Add(const G4VTouchable *);
 
   /**
+  * Set the x index (column) of the segment
+  */
+  inline virtual void SetColumn(unsigned col) { col_ = col; }
+
+  /**
+  * Return the column index of the segment
+  */
+  inline virtual unsigned GetColumn() const { return col_; }
+
+  /**
+  * Set the y index (row) of the segment.
+  */
+  inline virtual void SetRow(unsigned row) { row_ = row; }
+
+  /**
+  * Return the row index of the segment.
+  */
+  inline virtual unsigned GetRow() const { return row_; }
+
+  /**
   * Set the physical volume for this hit.
   */
   virtual void SetPhysVol(G4VPhysicalVolume * vol) { physVol_ = vol; }
@@ -71,12 +91,71 @@ public:
   */
   G4int GetHitCount() const { return nPhotons_; }
 
+
+  /**
+  * Set the position of the segment.
+  */
+  inline virtual void SetPosition(G4ThreeVector p) { pos_ = p; }
+  
+  /**
+  * Get the position of segment
+  */
+  inline virtual G4ThreeVector GetPosition() const { return pos_; }
+
+  /**
+  * Set the rotation of the segment.
+  */
+  inline virtual void SetRotation(G4RotationMatrix r) { rot_ = r; }
+
+  /**
+  * Get the rotation of the segment.
+  */
+  inline virtual G4RotationMatrix GetRotation() const { return rot_; }
+
+  /**
+  * Set the logical volume.
+  */
+  inline virtual void SetLogicalVolume(G4LogicalVolume * log ) { logVol_ = log; }
+
+  /**
+  * Get the logical volume.
+  */
+  inline virtual G4LogicalVolume * GetLogicalVolume() const { return logVol_; }
+
+
+  /**
+  * Set segment dimensions
+  */
+  inline virtual void SetDimensions(G4double x, G4double y, G4double z) {
+    wx_ = x;
+    wy_ = y;
+    wz_ = z;
+  }
+
+
+  /**
+  * Get segment dimensions
+  */
+
+
+
 private:
 
   G4int nPhotons_;
 
+  unsigned col_;
+  unsigned row_;
+
   const G4VTouchable * touchable_;
   G4VPhysicalVolume * physVol_;
+  G4LogicalVolume * logVol_;
+
+  G4double wx_;
+  G4double wy_;
+  G4double wz_;
+
+  G4ThreeVector pos_;
+  G4RotationMatrix rot_;
   
 
 };
