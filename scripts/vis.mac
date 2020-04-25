@@ -27,7 +27,7 @@
 
 #
 # Specify view angle:
-/vis/viewer/set/viewpointThetaPhi 40. 40.
+/vis/viewer/set/viewpointThetaPhi 0. 0.
 
 
 # Draw smooth trajectories at end of event, showing trajectory points

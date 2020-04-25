@@ -35,7 +35,7 @@ SSEDetectorConstruction::SSEDetectorConstruction():
   checkOverlaps_(true),
   world_width_(150*cm),
   world_height_(150*cm),
-  width_( 100*cm),
+  width_( 150*cm),
   height_(30*cm),
   ro_height_(1*mm),
   nXSegments_(75U),
