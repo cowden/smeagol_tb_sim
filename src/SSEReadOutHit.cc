@@ -1,4 +1,6 @@
 
+#include <cmath>
+
 #include "SSEReadOutHit.h"
 
 #include "G4VTouchable.hh"
@@ -66,7 +68,7 @@ void SSEReadOutHit::Draw()
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if ( pVVisManager ) {
 
-    G4double intensity = (G4double)nPhotons_/5.;
+    G4double intensity = log10((G4double)nPhotons_)/6.;
     if ( intensity > 1. )
       intensity = 1.;
 

@@ -23,7 +23,7 @@ SSEPrimaryGeneratorAction::SSEPrimaryGeneratorAction():
   auto particleDef = G4ParticleTable::GetParticleTable()->FindParticle("e-");
   particleGun_->SetParticleDefinition(particleDef);
   particleGun_->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun_->SetParticleEnergy(50.*MeV);  
+  particleGun_->SetParticleEnergy(5.*GeV);  
 
 }
 
