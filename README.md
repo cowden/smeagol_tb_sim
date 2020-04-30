@@ -37,7 +37,14 @@ scenarios to study.  Some of these may leverage common code in the
 `include` and `src` directories.
 
 ## Simple Ecal `simple_ecal.cc`
+A 500 MeV electron
+![e_500MeV_01.png](doc/img/e_500MeV_01.png)
 
+A 500 MeV Gamma
+![g_500MeV_01.png](doc/img/g_500MeV_01.png)
+
+A 500 MeV Pi0
+![pi0_500MeV_01.png](doc/img/pi0_500MeV_01.png)
 
 # Setup and Running
 
