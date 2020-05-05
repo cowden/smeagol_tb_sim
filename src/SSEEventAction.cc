@@ -5,6 +5,7 @@
 #include "G4Event.hh"
 #include "G4VVisManager.hh"
 #include "G4SDManager.hh"
+#include "SSEAnalysis.h"
 
 #include "SSEReadOutHit.h"
 
@@ -44,6 +45,20 @@ void SSEEventAction::EndOfEventAction(const G4Event * event)
     for ( unsigned i=0; i != nSegments; i++ )
       (*roHits)[i]->Draw();
   }
+
+  // -------------
+  // get the analysis manager
+  auto am_ = G4AnalysisManager::Instance();
+
+  // write out sensitive detector
+  for ( unsigned i = 0; i != nSegments; i++ ) {
+    am_->FillNtupleIColumn(1,0,i);
+    am_->FillNtupleDColumn(1,1,(*roHits)[i]->GetHitCount());
+    am_->AddNtupleRow(1);
+  }
+
+  // write out track information
+
   
 
 
