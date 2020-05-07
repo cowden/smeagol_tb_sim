@@ -4,6 +4,7 @@
 #include "SSEPrimaryGeneratorAction.h"
 #include "SSERunAction.h"
 #include "SSEEventAction.h"
+#include "SSEStackingAction.h"
 
 SSEActionInitialization::SSEActionInitialization(SSEDetectorConstruction* det):
   G4VUserActionInitialization()
@@ -15,6 +16,7 @@ SSEActionInitialization::~SSEActionInitialization()
 
 void SSEActionInitialization::BuildForMaster() const
 {
+  SetUserAction(new SSERunAction);
 }
 
 void SSEActionInitialization::Build() const
@@ -22,5 +24,6 @@ void SSEActionInitialization::Build() const
   SetUserAction(new SSEPrimaryGeneratorAction);
   SetUserAction(new SSERunAction);
   SetUserAction(new SSEEventAction);
+  SetUserAction(new SSEStackingAction);
 }
 

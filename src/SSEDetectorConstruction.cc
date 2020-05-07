@@ -28,6 +28,7 @@
 #include "G4SystemOfUnits.hh"
 
 #include "SSEReadOutSD.h"
+#include "SSEAbsorberSD.h"
 
 
 SSEDetectorConstruction::SSEDetectorConstruction():
@@ -234,6 +235,13 @@ void SSEDetectorConstruction::ConstructSDandField()
   G4SDManager::GetSDMpointer()->AddNewDetector(readoutSD);
 
   SetSensitiveDetector(roSegmentLog_,readoutSD);
+
+  // absorber SD
+  G4cout << "Constructing SSEAbsorberSD" << G4endl;
+  SSEAbsorberSD* absSD = new SSEAbsorberSD("SSEABsorberSD");
+  G4SDManager::GetSDMpointer()->AddNewDetector(absSD);
+
+  SetSensitiveDetector(absorberLog_,absSD);
   
 
 }
