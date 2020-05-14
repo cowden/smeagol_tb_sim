@@ -51,9 +51,13 @@ void SSEAbsorberHit::Print()
 void SSEAbsorberHit::AddTrack(const G4Track *aTrack)
 {
 
+
+  auto pdg = aTrack->GetParticleDefinition()->GetPDGEncoding();
+
   // get the energy
   if ( aTrack->GetTotalEnergy() >= e_threshold_ ) {
     nTracks_++;
+    
     if ( aTrack->GetDynamicParticle()->GetCharge() )
       nCharged_++;
   }

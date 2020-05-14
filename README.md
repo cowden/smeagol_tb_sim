@@ -30,6 +30,14 @@ debugging symbols.
 export G4DEBUG=1
 ```
 
+Verbose outputs can also be helpful in debugging and understanding what
+Geant is doing.  The verbosity level, how much to output, can be
+controlled by the argument to the verbose option.  Here are some helpful
+flags to put in a macro:
+* /event/verbose 2
+* /event/stack/verbose 2
+* /tracking/verbose 1
+* /process/em/verbose 1
 
 # Geometries
 The following simulation executables implement various geometries and

@@ -5,6 +5,7 @@
 #include "SSERunAction.h"
 #include "SSEEventAction.h"
 #include "SSEStackingAction.h"
+#include "SSESteppingAction.h"
 
 SSEActionInitialization::SSEActionInitialization(SSEDetectorConstruction* det):
   G4VUserActionInitialization()
@@ -25,5 +26,6 @@ void SSEActionInitialization::Build() const
   SetUserAction(new SSERunAction);
   SetUserAction(new SSEEventAction);
   SetUserAction(new SSEStackingAction);
+  SetUserAction(new SSESteppingAction);
 }
 

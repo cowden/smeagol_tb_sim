@@ -238,7 +238,7 @@ void SSEDetectorConstruction::ConstructSDandField()
 
   // absorber SD
   G4cout << "Constructing SSEAbsorberSD" << G4endl;
-  SSEAbsorberSD* absSD = new SSEAbsorberSD("SSEABsorberSD");
+  SSEAbsorberSD* absSD = new SSEAbsorberSD("SSEAbsorberSD");
   G4SDManager::GetSDMpointer()->AddNewDetector(absSD);
 
   SetSensitiveDetector(absorberLog_,absSD);
