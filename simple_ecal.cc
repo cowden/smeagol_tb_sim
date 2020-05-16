@@ -5,7 +5,7 @@
 /////////////////////////////////////////////
 
 
-
+#include <fstream>
 
 #include "G4MTRunManager.hh"
 
@@ -44,6 +44,16 @@ int main(int argc, char **argv) {
   for ( G4int i=1; i<argc; i=i+2 ) {
     if ( G4String(argv[i]) == "-m" ) macro = argv[i+1];
   }
+
+  // set the random seed
+  std::fstream randRead;
+  randRead.open("/dev/urandom",std::fstream::binary|std::fstream::in);
+  G4long seed;
+  randRead.read((char*)(&seed),4);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
+  CLHEP::HepRandom::setTheSeed(seed);
+  G4cout << "The random seed is " << seed << G4endl;
+  
 
   // set up the UI and run manager
   G4UIExecutive * ui = nullptr;
