@@ -14,7 +14,6 @@
 #include "globals.hh"
 
 class G4VPhysicalVolume;
-class G4GlobalMagFieldMessenger;
 class G4PVReplica;
 
 class SSEDetectorConstruction : public G4VUserDetectorConstruction

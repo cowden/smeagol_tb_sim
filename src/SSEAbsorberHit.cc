@@ -10,7 +10,7 @@ G4ThreadLocal G4Allocator<SSEAbsorberHit> * SSEAbsorberHitAllocator=0;
 
 SSEAbsorberHit::SSEAbsorberHit()
  :G4VHit()
- ,e_threshold_(25*MeV)
+ ,e_threshold_(0.5*MeV)
  ,nTracks_(0U)
  ,nCharged_(0U)
 { }

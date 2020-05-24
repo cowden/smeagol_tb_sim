@@ -14,8 +14,8 @@
 # 1 event with tracking/verbose
 #
 /process/em/verbose 0
-/gun/particle e-
-/gun/energy 5 GeV
+/gun/particle gamma
+/gun/energy 500 GeV
 /tracking/verbose 0
 /run/beamOn 1
 #
