@@ -3,7 +3,7 @@
 
 #include "SSEPrimaryGeneratorAction.h"
 #include "SSEStackingAction.h"
-#include "SSESteppingAction.h"
+#include "WBSteppingAction.h"
 #include "WBEventAction.h"
 #include "WBRunAction.h"
 
@@ -31,7 +31,7 @@ void WBActionInitialization::Build() const
   
   SetUserAction(new SSEPrimaryGeneratorAction);
   SetUserAction(new SSEStackingAction);
-  SetUserAction(new SSESteppingAction(cgint));
+  SetUserAction(new WBSteppingAction(cgint));
 
   SetUserAction(new WBEventAction(cgint));
   SetUserAction(new WBRunAction(cgint));

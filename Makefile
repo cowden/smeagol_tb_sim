@@ -15,7 +15,7 @@ endif
 CGDIR := /home/me/proj/CaloX/CaloXUtils/calography
 CGINC := -I$(CGDIR)/calography 
 CGLIB := -L$(CGDIR)/src -lCaloGraphy -lCGG4
-CCFLAGS := $(CGINC)
+CPPFLAGS := $(CGINC)
 LDFLAGS += $(CGLIB)
 
 .PHONY: all

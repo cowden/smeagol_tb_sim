@@ -11,7 +11,6 @@
 
 WBRunAction::WBRunAction(cg::CGG4Interface *cgint)
 : G4UserRunAction()
-,num_(0U)
 ,cg_(cgint)
 {
 
