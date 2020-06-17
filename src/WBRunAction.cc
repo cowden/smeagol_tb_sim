@@ -4,9 +4,15 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
- 
-WBRunAction::WBRunAction()
+#include "G4Threading.hh"
+
+#include "CGG4Interface.h"
+
+
+WBRunAction::WBRunAction(cg::CGG4Interface *cgint)
 : G4UserRunAction()
+,num_(0U)
+,cg_(cgint)
 {
 
   // create analysis manager
@@ -32,10 +38,14 @@ WBRunAction::WBRunAction()
 }
 
 
+
+
 WBRunAction::~WBRunAction()
 {
   delete G4AnalysisManager::Instance();
 }
+
+
 
 void WBRunAction::BeginOfRunAction(const G4Run *run)
 {
@@ -46,6 +56,8 @@ void WBRunAction::BeginOfRunAction(const G4Run *run)
   G4String fileName = "wb_data";
   am->OpenFile(fileName);
 }
+
+
 
 void WBRunAction::EndOfRunAction(const G4Run* run)
 {
@@ -58,4 +70,15 @@ void WBRunAction::EndOfRunAction(const G4Run* run)
   // write & close the file
   am->Write();
   am->CloseFile();
+
+  // push to master (if this is a worker thread)
+  if ( G4Threading::IsWorkerThread() ) {
+    cg_->merge();
+  } else {
+    //print the static data
+    //print_data();
+  }
 }
+
+
+

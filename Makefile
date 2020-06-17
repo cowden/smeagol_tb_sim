@@ -11,6 +11,13 @@ ifndef G4INSTALL
   G4INSTALL= ../../../
 endif
 
+# include and link CaloGraphy
+CGDIR := /home/me/proj/CaloX/CaloXUtils/calography
+CGINC := -I$(CGDIR)/calography 
+CGLIB := -L$(CGDIR)/src -lCaloGraphy -lCGG4
+CCFLAGS := $(CGINC)
+LDFLAGS += $(CGLIB)
+
 .PHONY: all
 all: lib bin
 

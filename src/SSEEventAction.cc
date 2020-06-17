@@ -59,7 +59,5 @@ void SSEEventAction::EndOfEventAction(const G4Event * event)
 
   // write out track information
 
-  
-
 
 }

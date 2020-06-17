@@ -4,7 +4,7 @@
 # or interactively: Idle> /control/execute run1.mac
 #
 # Change the default number of workers (in multi-threading mode) 
-#/run/numberOfWorkers 4
+#/run/numberOfWorkers 1
 #
 # Initialize kernel
 /run/initialize
@@ -13,11 +13,11 @@
 # electron 50 MeV in direction (0.,0.,1.)
 # 1 event with tracking/verbose
 #
-/process/em/verbose 0
-/gun/particle gamma
-/gun/energy 500 GeV
-/tracking/verbose 0
-/run/beamOn 1
+#/process/em/verbose 0
+#/tracking/verbose 2
+/gun/particle pi+
+/gun/energy 50 GeV
+/run/beamOn 100
 #
 #
 # muon 300 MeV in direction (0.,0.,1.)
