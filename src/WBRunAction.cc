@@ -76,6 +76,7 @@ void WBRunAction::EndOfRunAction(const G4Run* run)
   } else {
     //print the static data
     //print_data();
+    cg_->write_collection(run->GetRunID());
   }
 }
 
